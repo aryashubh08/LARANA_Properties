@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 4400;
 
 // Import routes
 const userRoutes = require("./routes/userRoutes");
+const listingRoutes = require("./routes/listing");
 
 // DB connection
 const db = require("./config/connection");
@@ -23,6 +24,7 @@ app.use(express.json());
 
 // Mount routes
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/creator", listingRoutes);
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
