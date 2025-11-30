@@ -21,8 +21,11 @@ const stateSlice = createSlice({
       state.token = null;
       state.isLoggedIn = false;
     },
+    setListings: (state, action) => {
+      state.listings = action.payload.listings;
+    },
   },
 });
 
-export const { setLogin, setLogout } = stateSlice.actions;
+export const { setLogin, setLogout, setListings } = stateSlice.actions;
 export default stateSlice.reducer;

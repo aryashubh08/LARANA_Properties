@@ -77,48 +77,46 @@ const CreateListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    ```
-try {  
-  const listingForm = new FormData();  
+    try {
+      const listingForm = new FormData();
 
-  // Text/number fields  
-  listingForm.append("userId", creatorId);  
-  listingForm.append("category", category);  
-  listingForm.append("type", type);  
-  listingForm.append("streetAddress", formLocation.streetAddress);  
-  listingForm.append("apartment", formLocation.apartment);  
-  listingForm.append("city", formLocation.city);  
-  listingForm.append("province", formLocation.province);  
-  listingForm.append("country", formLocation.country);  
-  listingForm.append("guestCount", guestCount);  
-  listingForm.append("bedroomCount", bedroomCount);  
-  listingForm.append("bedCount", bedCount);  
-  listingForm.append("bathroomCount", bathroomCount);  
-  listingForm.append("title", formDescription.title);  
-  listingForm.append("description", formDescription.description);  
-  listingForm.append("highlight", formDescription.highlight);  
-  listingForm.append("highlightDetails", formDescription.highlightDetails);  
-  listingForm.append("price", formDescription.price);  
-  listingForm.append("amenities", JSON.stringify(amenities));  
+      // Text/number fields
+      listingForm.append("userId", creatorId);
+      listingForm.append("category", category);
+      listingForm.append("type", type);
+      listingForm.append("streetAddress", formLocation.streetAddress);
+      listingForm.append("apartment", formLocation.apartment);
+      listingForm.append("city", formLocation.city);
+      listingForm.append("province", formLocation.province);
+      listingForm.append("country", formLocation.country);
+      listingForm.append("guestCount", guestCount);
+      listingForm.append("bedroomCount", bedroomCount);
+      listingForm.append("bedCount", bedCount);
+      listingForm.append("bathroomCount", bathroomCount);
+      listingForm.append("title", formDescription.title);
+      listingForm.append("description", formDescription.description);
+      listingForm.append("highlight", formDescription.highlight);
+      listingForm.append("highlightDetails", formDescription.highlightDetails);
+      listingForm.append("price", formDescription.price);
+      listingForm.append("amenities", JSON.stringify(amenities));
 
-  photos.forEach((photo) => {  
-    listingForm.append("listingPhotos", photo); // ✅ must match multer  
-  });  
+      photos.forEach((photo) => {
+        listingForm.append("listingPhotos", photo); // ✅ must match multer
+      });
 
-  const response = await fetch(  
-    "http://localhost:4400/api/v1/creator/create-listing",  
-    {  
-      method: "POST",  
-      body: listingForm,  
-    }  
-  );  
-  if (response.ok) {  
-    navigate("/");  
-  }  
-} catch (error) {  
-  console.log(error);  
-}  
-```;
+      const response = await fetch(
+        "http://localhost:4400/api/v1/creator/create-listing",
+        {
+          method: "POST",
+          body: listingForm,
+        }
+      );
+      if (response.ok) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   console.log(photos);
@@ -127,7 +125,6 @@ try {
     <div className="bg-gray-100 min-h-screen">
       {" "}
       <Navbar />
-      ```
       <div className="pt-28 px-4 md:pt-32 md:px-10">
         <h1 className="text-2xl font-semibold mb-6">Publish Your Place</h1>
 

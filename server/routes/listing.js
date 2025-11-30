@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middlewares/multer");
-const { createListing, getListing } = require("../controllers/listing");
+const {
+  createListing,
+  getListing,
+  getListingDetails,
+} = require("../controllers/listing");
 
 router.post(
   "/create-listing",
@@ -9,5 +13,6 @@ router.post(
   createListing
 );
 router.get("/get-listing", getListing);
+router.get("/get-listing/:listingId", getListingDetails);
 
 module.exports = router;

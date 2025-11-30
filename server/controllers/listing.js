@@ -109,18 +109,37 @@ exports.getListing = async (req, res) => {
         "creator"
       );
     } else {
-      listings = await Listing.find();
+      listings = await Listing.find().populate("creator");
     }
-    res.status(200).json({
+
+    return res.status(200).json({
       success: true,
-      listings,
+      listings, // always same shape
     });
   } catch (error) {
     console.log("Error in getting Listing:", error);
+
     return res.status(500).json({
       success: false,
       message: "Internal server error",
       error: error.message,
+    });
+  }
+};
+
+//GET LISTING Details
+exports.getListingDetails = async (req, res) => {
+  try {
+    const { listingId } = req.params;
+    const listing = await Listing.findById(listingId).populate("creator");
+    res.status(202).json({
+      success: true,
+      listing,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
     });
   }
 };
