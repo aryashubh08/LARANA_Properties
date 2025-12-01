@@ -5,6 +5,8 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { BsCurrencyRupee } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
+import toast from "react-hot-toast"; // ⬅ ADD THIS
 
 const ListingDetails = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const ListingDetails = () => {
       setLoading(false);
     } catch (error) {
       console.log("Fetch listing details failed", error.message);
+      toast.error("Failed to load listing");
     }
   };
 
@@ -44,11 +47,10 @@ const ListingDetails = () => {
         ) + 1
       : 0;
 
-  //submit bookings
-
+  // submit bookings
   const handleSubmit = async () => {
     if (!selectedRange.from || !selectedRange.to) {
-      alert("Please select start and end dates");
+      toast.error("Please select start and end dates");
       return;
     }
 
@@ -62,6 +64,8 @@ const ListingDetails = () => {
         totalPrice: listing.price * dayCount,
       };
 
+      const loadingToast = toast.loading("Processing your booking...");
+
       const response = await fetch(
         "http://localhost:4400/api/v1/bookings/create-booking",
         {
@@ -73,11 +77,17 @@ const ListingDetails = () => {
         }
       );
 
+      toast.dismiss(loadingToast);
+
       if (response.ok) {
+        toast.success("Booking confirmed!");
         navigate(`/${customerId}/trips`);
+      } else {
+        toast.error("Booking failed. Please try again.");
       }
     } catch (error) {
       console.log("Submit booking failed", error.message);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -176,10 +186,12 @@ const ListingDetails = () => {
                 }
               />
             </div>
+
             {dayCount > 0 && (
               <div className="">
                 <h2 className="text-xl font-semibold">
-                  {listing.price} x {dayCount} night{dayCount > 1 ? "s" : ""}
+                  {listing.price} x {dayCount} night
+                  {dayCount > 1 ? "s" : ""}
                 </h2>
                 <h2 className="flex text-lg text-gray-700 font-semibold items-center">
                   Total price: <BsCurrencyRupee />

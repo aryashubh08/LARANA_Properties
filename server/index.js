@@ -13,14 +13,16 @@ const bookingRoutes = require("./routes/bookingRoute");
 const db = require("./config/connection");
 db.connect();
 
-// Middlewares
+// Allow your frontend origin and PATCH method
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: "GET,POST,PUT,DELETE",
     credentials: true,
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(express.json());
 
 // Mount routes

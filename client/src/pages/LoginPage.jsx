@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setLogin } from "../redux/slices/state";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast"; // ⬅ ADD THIS
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -20,6 +20,7 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch("http://localhost:4400/api/v1/user/login", {
         method: "POST",
@@ -28,6 +29,13 @@ const RegisterPage = () => {
       });
 
       const loggedIn = await response.json();
+
+      // toast.dismiss(loadingToast);
+
+      if (!response.ok) {
+        toast.error(loggedIn.message || "Invalid email or password");
+        return;
+      }
 
       if (loggedIn && loggedIn.token) {
         // 1️⃣ Save in Redux
@@ -42,30 +50,34 @@ const RegisterPage = () => {
         localStorage.setItem("user", JSON.stringify(loggedIn.user));
         localStorage.setItem("token", loggedIn.token);
 
+        toast.success("Login successful!");
+
         navigate("/"); // redirect
       }
     } catch (error) {
+      toast.error("Login failed. Try again later.");
       console.log("Login failed", error.message);
     }
   };
 
   return (
-    <div className="w-full  flex items-center  justify-center ">
+    <div className="w-full flex items-center justify-center">
       <img
         src="assets/login.jpg"
         alt=""
-        className="w-full h-screen relative  object-cover"
+        className="w-full h-screen relative object-cover"
       />
-      <div className="md:w-1/3 w-9/10 border-none outline-none  mx-auto  border p-6 md:p-8 absolute rounded-xl bg-white">
+      <div className="md:w-1/3 w-9/10 mx-auto p-6 md:p-8 absolute rounded-xl bg-white">
         <h1 className="text-xl font-semibold text-black">LogIn Your Account</h1>
+
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 mt-4 text-center text-gray-700 outline-none"
+          className="flex flex-col gap-4 mt-4 text-center text-gray-700"
         >
           <input
             onChange={handleChange}
             value={formData.email}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="email"
             placeholder="Email"
             name="email"
@@ -74,7 +86,7 @@ const RegisterPage = () => {
           <input
             onChange={handleChange}
             value={formData.password}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="password"
             placeholder="Password"
             name="password"
@@ -88,8 +100,9 @@ const RegisterPage = () => {
             LogIn
           </button>
         </form>
+
         <a href="/register" className="text-sm mt-2 text-blue-600">
-          Don't have an account? Sign In Here
+          Don't have an account? Sign Up Here
         </a>
       </div>
     </div>

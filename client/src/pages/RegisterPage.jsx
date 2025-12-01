@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"; // ⬅ ADD THIS
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const RegisterPage = () => {
       [name]: name === "profileImage" ? files[0] : value,
     });
   };
+
   useEffect(() => {
     setPasswordMatch(
       formData.password === formData.confirmPassword ||
@@ -31,6 +32,16 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!passwordMatch) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    if (!formData.profileImage) {
+      toast.error("Please upload a profile image");
+      return;
+    }
 
     try {
       const register_form = new FormData();
@@ -48,35 +59,43 @@ const RegisterPage = () => {
           body: register_form,
         }
       );
+
+      const data = await response.json();
+      // toast.dismiss(loadingToast);
+
       if (response.ok) {
+        toast.success("Account created successfully!");
         navigate("/login");
+      } else {
+        toast.error(data.message || "Registration failed");
       }
     } catch (error) {
+      toast.error("Something went wrong. Try again!");
       console.log("Registration failed", error.message);
     }
   };
 
-  console.log(formData);
-
   return (
-    <div className="w-full  flex items-center  justify-center ">
+    <div className="w-full flex items-center justify-center">
       <img
         src="assets/login.jpg"
         alt=""
-        className="w-full h-screen relative  object-cover"
+        className="w-full h-screen relative object-cover"
       />
-      <div className="md:w-1/3 w-9/10 border-none outline-none  mx-auto  border p-6 md:p-8 absolute rounded-xl bg-white">
+
+      <div className="md:w-1/3 w-9/10 mx-auto p-6 md:p-8 absolute rounded-xl bg-white">
         <h1 className="text-xl font-semibold text-black">
           Create Your Account
         </h1>
+
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 mt-4 text-center text-gray-700 outline-none"
+          className="flex flex-col gap-4 mt-4 text-center text-gray-700"
         >
           <input
             onChange={handleChange}
             value={formData.firstName}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="text"
             placeholder="First Name"
             name="firstName"
@@ -85,7 +104,7 @@ const RegisterPage = () => {
           <input
             value={formData.lastName}
             onChange={handleChange}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="text"
             placeholder="Last Name"
             name="lastName"
@@ -94,7 +113,7 @@ const RegisterPage = () => {
           <input
             onChange={handleChange}
             value={formData.email}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="email"
             placeholder="Email"
             name="email"
@@ -103,24 +122,27 @@ const RegisterPage = () => {
           <input
             onChange={handleChange}
             value={formData.password}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="password"
             placeholder="Password"
             name="password"
             required
           />
+
           {!passwordMatch && (
-            <p className="text-red-500">Password are not matched</p>
+            <p className="text-red-500 text-sm">Passwords do not match</p>
           )}
+
           <input
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="border border-gray-300  px-3 py-1 rounded outline-none"
+            className="border border-gray-300 px-3 py-1 rounded"
             type="password"
             placeholder="Confirm Password"
             name="confirmPassword"
             required
           />
+
           <input
             id="image"
             onChange={handleChange}
@@ -130,11 +152,11 @@ const RegisterPage = () => {
             required
             style={{ display: "none" }}
           />
+
           <label
             htmlFor="image"
-            className="flex items-center justify-center gap-3"
+            className="flex items-center justify-center gap-3 cursor-pointer"
           >
-            {" "}
             <img
               src="/assets/addImage.png"
               alt="add profile photo"
@@ -144,7 +166,7 @@ const RegisterPage = () => {
             {formData.profileImage && (
               <img
                 src={URL.createObjectURL(formData.profileImage)}
-                alt="profile photo"
+                alt="profile preview"
                 className="w-15 h-15 rounded-full bg-contain"
               />
             )}
@@ -152,7 +174,11 @@ const RegisterPage = () => {
 
           <button
             disabled={!passwordMatch}
-            className="bg-red-600 cursor-pointer my-5 rounded px-4 py-2 text-white"
+            className={`${
+              !passwordMatch
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            } bg-red-600 my-5 rounded px-4 py-2 text-white`}
             type="submit"
           >
             Register

@@ -9,6 +9,7 @@ import TextInput from "../components/TextInput";
 import CounterBox from "../components/CounterBox";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const CreateListing = () => {
   const navigate = useNavigate();
@@ -72,15 +73,21 @@ const CreateListing = () => {
   };
 
   const creatorId = useSelector((state) => state.user._id);
-  console.log(creatorId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // SIMPLE VALIDATIONS
+    if (!category) return toast.error("Please select a category");
+    if (!type) return toast.error("Please select a place type");
+    if (photos.length === 0)
+      return toast.error("Please upload at least 1 photo");
+    if (!formDescription.title || !formDescription.price)
+      return toast.error("Title & Price are required");
+
     try {
       const listingForm = new FormData();
 
-      // Text/number fields
       listingForm.append("userId", creatorId);
       listingForm.append("category", category);
       listingForm.append("type", type);
@@ -101,8 +108,10 @@ const CreateListing = () => {
       listingForm.append("amenities", JSON.stringify(amenities));
 
       photos.forEach((photo) => {
-        listingForm.append("listingPhotos", photo); // ✅ must match multer
+        listingForm.append("listingPhotos", photo);
       });
+
+      const loadingToast = toast.loading("Publishing your listing...");
 
       const response = await fetch(
         "http://localhost:4400/api/v1/creator/create-listing",
@@ -111,20 +120,25 @@ const CreateListing = () => {
           body: listingForm,
         }
       );
+
+      toast.dismiss(loadingToast);
+
       if (response.ok) {
+        toast.success("Listing Published Successfully!");
         navigate("/");
+      } else {
+        toast.error("Failed to publish listing");
       }
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong!");
     }
   };
 
-  console.log(photos);
-
   return (
     <div className="bg-gray-100 min-h-screen">
-      {" "}
       <Navbar />
+
       <div className="pt-28 px-4 md:pt-32 md:px-10">
         <h1 className="text-2xl font-semibold mb-6">Publish Your Place</h1>
 

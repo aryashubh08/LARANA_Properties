@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { FiMenu } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
@@ -9,9 +9,9 @@ import { setLogout } from "../redux/slices/state";
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [dropdownMenu, setDropDownMenu] = useState(false);
-
   const dropdownRef = useRef();
 
   useEffect(() => {
@@ -20,15 +20,19 @@ const Navbar = () => {
         setDropDownMenu(false);
       }
     };
-
     document.addEventListener("mousedown", handler);
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const handleLogout = () => {
+    dispatch(setLogout());
+    localStorage.removeItem("user"); // clear localStorage
+    localStorage.removeItem("token"); // clear token
+    navigate("/login");
+  };
+
   return (
-    <div className="fixed top-0 z-100 bg-white  shadow-md  px-10 flex w-full items-center justify-between">
+    <div className="fixed top-0 z-100 bg-white shadow-md px-10 flex w-full items-center justify-between">
       <Link to="/" className="max-md:w-20">
         <img
           src="/assets/logo.png"
@@ -55,44 +59,62 @@ const Navbar = () => {
         >
           <FiMenu className="text-2xl text-gray-600" />
 
-          {!user ? (
-            <FaUser className="text-lg text-gray-600" />
-          ) : (
+          {user?.profileImagePath ? (
             <img
               className="object-cover rounded-full w-8 h-8"
               src={user.profileImagePath}
               alt="profile"
             />
+          ) : (
+            <FaUser className="text-lg text-gray-600" />
           )}
 
           {/* DROPDOWN */}
-          {dropdownMenu && !user && (
-            <div className="absolute right-0 top-[110%] bg-white border border-gray-300 rounded-xl p-3 flex flex-col w-36 text-sm">
-              <Link to="/login">LogIn</Link>
-              <Link to="/register">Sign Up</Link>
-            </div>
-          )}
-
-          {dropdownMenu && user && (
-            <div className="absolute flex flex-col font-normal border border-gray-300 bg-white p-3 right-0 top-[110%] w-36 text-sm rounded-xl">
-              <Link className="hover:bg-gray-200 p-1 rounded">Trip List</Link>
-              <Link className="hover:bg-gray-200 p-1 rounded">Wish List</Link>
-              <Link className="hover:bg-gray-200 p-1 rounded">
-                Property List
-              </Link>
-              <Link className="hover:bg-gray-200 p-1 rounded">
-                Reservation List
-              </Link>
-              <Link className="hover:bg-gray-200 p-1 rounded">
-                Become A Host
-              </Link>
-
-              <Link
-                className="text-left hover:bg-gray-200 p-1 rounded"
-                onClick={() => dispatch(setLogout())}
-              >
-                Log Out
-              </Link>
+          {dropdownMenu && (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="absolute flex flex-col font-normal border z-50 border-gray-300 bg-white p-3 right-0 top-[110%] w-36 text-sm rounded-xl"
+            >
+              {!user ? (
+                <>
+                  <Link to="/login" className="hover:bg-gray-200 p-1 rounded">
+                    LogIn
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="hover:bg-gray-200 p-1 rounded"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to={`${user._id}/trips`}
+                    className="hover:bg-gray-200 p-1 rounded"
+                  >
+                    Trip List
+                  </Link>
+                  <Link className="hover:bg-gray-200 p-1 rounded">
+                    Wish List
+                  </Link>
+                  <Link className="hover:bg-gray-200 p-1 rounded">
+                    Property List
+                  </Link>
+                  <Link className="hover:bg-gray-200 p-1 rounded">
+                    Reservation List
+                  </Link>
+                  <Link className="hover:bg-gray-200 p-1 rounded">
+                    Become A Host
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-left hover:bg-gray-200 p-1 rounded"
+                  >
+                    Log Out
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
