@@ -56,7 +56,13 @@ exports.addToWishList = async (req, res) => {
     await user.save();
 
     // Return populated wishlist
-    const populatedUser = await User.findById(userId).populate("wishList");
+    const populatedUser = await User.findById(userId).populate({
+      path: "wishList",
+      populate: {
+        path: "creator",
+        model: "User",
+      },
+    });
 
     res.status(200).json({
       success: true,
@@ -69,5 +75,42 @@ exports.addToWishList = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+//GET PROPERTY LIST
+exports.getPropertyList = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const properties = await Listing.find({ creator: userId }).populate(
+      "creator"
+    );
+    res.status(200).json({
+      success: true,
+      properties,
+    });
+  } catch (error) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+//GET RESERVATION LIST
+exports.getReservationList = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const reservation = await Booking.find({ hostId: userId }).populate(
+      "customerId hostId listingId"
+    );
+    return res.status(200).json({
+      success: true,
+      reservation,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: "Can not find reservation",
+    });
   }
 };

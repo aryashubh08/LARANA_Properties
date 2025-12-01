@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setWishList } from "../redux/slices/state";
 import { FaHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const ListingCard = ({
   listingId,
@@ -27,6 +28,7 @@ const ListingCard = ({
   const user = useSelector((state) => state.user);
   const wishList = user?.wishList || [];
   const isLiked = wishList.some((item) => item?._id?.toString() === listingId);
+  console.log(wishList);
 
   const goToPrevSlide = (e) => {
     e.preventDefault();
@@ -47,27 +49,31 @@ const ListingCard = ({
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:4400/api/v1/user/${user._id}/${listingId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+      if (user?._id !== creator._id) {
+        const response = await fetch(
+          `http://localhost:4400/api/v1/user/${user._id}/${listingId}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+          toast.error(data.message || "Something went wrong");
+          return;
         }
-      );
 
-      const data = await response.json();
+        toast.success(
+          data.isLiked ? "Added to wishlist" : "Removed from wishlist"
+        );
 
-      if (!data.success) {
-        toast.error(data.message || "Something went wrong");
+        // Update Redux
+        dispatch(setWishList(data.wishList));
+      } else {
         return;
       }
-
-      toast.success(
-        data.isLiked ? "Added to wishlist" : "Removed from wishlist"
-      );
-
-      // Update Redux
-      dispatch(setWishList(data.wishList));
     } catch (err) {
       toast.error("Failed to update wishlist");
       console.log(err);

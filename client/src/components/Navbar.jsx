@@ -90,21 +90,33 @@ const Navbar = () => {
               ) : (
                 <>
                   <Link
-                    to={`${user._id}/trips`}
+                    to={`/${user._id}/trips`}
                     className="hover:bg-gray-200 p-1 rounded"
                   >
                     Trip List
                   </Link>
-                  <Link className="hover:bg-gray-200 p-1 rounded">
+                  <Link
+                    to={`/${user._id}/wishList`}
+                    className="hover:bg-gray-200 p-1 rounded"
+                  >
                     Wish List
                   </Link>
-                  <Link className="hover:bg-gray-200 p-1 rounded">
+                  <Link
+                    to={`/${user._id}/propertyList`}
+                    className="hover:bg-gray-200 p-1 rounded"
+                  >
                     Property List
                   </Link>
-                  <Link className="hover:bg-gray-200 p-1 rounded">
+                  <Link
+                    to={`/${user._id}/reservationList`}
+                    className="hover:bg-gray-200 p-1 rounded"
+                  >
                     Reservation List
                   </Link>
-                  <Link className="hover:bg-gray-200 p-1 rounded">
+                  <Link
+                    to="/create-listing"
+                    className="hover:bg-gray-200 p-1 rounded"
+                  >
                     Become A Host
                   </Link>
                   <button

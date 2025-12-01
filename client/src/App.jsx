@@ -10,6 +10,8 @@ import Navbar from "./components/Navbar";
 import TripList from "./pages/TripList";
 import { Toaster } from "react-hot-toast";
 import WishList from "./pages/WishList";
+import PropertyList from "./pages/PropertyList";
+import ReservationList from "./pages/ReservationList";
 
 const App = () => {
   useEffect(() => {
@@ -34,7 +36,9 @@ const App = () => {
         <Route path="/create-listing" element={<CreateListing />} />
         <Route path="/get-listing/:listingId" element={<ListingDetails />} />
         <Route path="/:userId/trips" element={<TripList />} />
-        <Route element={<WishList />} />
+        <Route path="/:userId/wishList" element={<WishList />} />
+        <Route path="/:userId/propertyList" element={<PropertyList />} />
+        <Route path="/:userId/reservationList" element={<ReservationList />} />
       </Routes>
     </>
   );
