@@ -84,9 +84,9 @@ const ListingDetails = () => {
 
   return (
     <>
-      <div className="max-w-6xl mx-auto px-6 md:px-12 pt-20">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 pt-30">
         {loading || !listing ? (
-          <p className="text-gray-600 text-center mt-20">Loading...</p>
+          <p className="text-gray-600 text-center mt-30">Loading...</p>
         ) : (
           <div className="space-y-10">
             {/* TITLE */}
