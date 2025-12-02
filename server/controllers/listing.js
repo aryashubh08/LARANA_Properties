@@ -127,6 +127,44 @@ exports.getListing = async (req, res) => {
   }
 };
 
+// SEARCH LISTINGS
+exports.getListingBySearch = async (req, res) => {
+  const { search } = req.params;
+
+  try {
+    let listings = [];
+
+    if (search === "all") {
+      listings = await Listing.find().populate("creator");
+    } else {
+      listings = await Listing.find({
+        $or: [
+          { category: { $regex: search, $options: "i" } },
+          { title: { $regex: search, $options: "i" } },
+          { city: { $regex: search, $options: "i" } },
+          { province: { $regex: search, $options: "i" } },
+          { country: { $regex: search, $options: "i" } },
+          { type: { $regex: search, $options: "i" } },
+          { streetAddress: { $regex: search, $options: "i" } },
+          { highlight: { $regex: search, $options: "i" } },
+        ],
+      }).populate("creator");
+    }
+
+    return res.status(200).json({
+      success: true,
+      listings,
+    });
+  } catch (error) {
+    console.log("Error in search:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 //GET LISTING Details
 exports.getListingDetails = async (req, res) => {
   try {

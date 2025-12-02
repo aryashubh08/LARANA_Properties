@@ -8,8 +8,10 @@ import { setLogout } from "../redux/slices/state";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
   const [dropdownMenu, setDropDownMenu] = useState(false);
   const dropdownRef = useRef();
@@ -42,8 +44,22 @@ const Navbar = () => {
       </Link>
 
       <div className="flex max-sm:hidden items-center justify-center border border-gray-300 rounded-full py-2 px-6 relative">
-        <input type="text" placeholder="Search..." className="outline-none" />
-        <IoIosSearch className="absolute mt-1 right-4 text-lg text-gray-600" />
+        <input
+          type="text"
+          placeholder="Search..."
+          className="outline-none"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button
+          className="absolute mt-1 right-4"
+          onClick={() => {
+            navigate(`/get-listing/search/${search}`);
+          }}
+          disabled={search === ""}
+        >
+          <IoIosSearch className=" text-lg text-gray-600" />
+        </button>
       </div>
 
       <div className="flex max-md:text-sm items-center justify-center gap-3 font-semibold">

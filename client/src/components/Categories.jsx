@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { categories } from "../data";
+import Footer from "./Footer";
 
 const Categories = () => {
   return (
@@ -16,20 +17,20 @@ const Categories = () => {
       </p>
 
       <div className="grid grid-cols-1 mt-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-        {categories?.slice(1, 9).map((category, index) => (
+        {categories?.slice(1, 16).map((category, index) => (
           <Link
-            to=""
+            to={`/get-listing/category/${category.label}`}
             key={index}
-            className="relative overflow-hidden rounded-sm group h-[250px] w-full"
+            className="relative overflow-hidden rounded-lg group h-[250px] w-full cursor-pointer"
           >
             {/* Background Image */}
             <img
               src={category?.img}
-              alt=""
-              className="w-full h-full object-cover"
+              alt={category.label}
+              className="w-full h-full object-cover transition-transform duration-500 transform group-hover:scale-110"
             />
 
-            {/* Overlay (ONLY overlay animates) */}
+            {/* Overlay */}
             <div
               className="
                 absolute inset-0 

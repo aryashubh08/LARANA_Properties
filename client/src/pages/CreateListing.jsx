@@ -10,6 +10,7 @@ import CounterBox from "../components/CounterBox";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Footer from "../components/Footer";
 
 const CreateListing = () => {
   const navigate = useNavigate();
@@ -438,6 +439,7 @@ const CreateListing = () => {
           </button>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { setPropertyList } from "../redux/slices/state";
 import Loader from "../components/Loader";
+import Footer from "../components/Footer";
 
 const PropertyList = () => {
   const [loading, setLoading] = useState(true);
@@ -44,40 +45,43 @@ const PropertyList = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="px-4 sm:px-8 md:px-16 lg:px-20 mt-30">
-      <h1 className="my-6 text-xl font-semibold">Your Property List</h1>
+    <>
+      <div className="px-4 sm:px-8 md:px-16 lg:px-20 pt-32">
+        <h1 className="my-6 text-xl font-semibold">Your Property List</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {propertyList.map(
-          ({
-            _id,
-            creator,
-            photos,
-            city,
-            province,
-            country,
-            category,
-            price,
-            type,
-            booking = false,
-          }) => (
-            <ListingCard
-              key={_id}
-              listingId={_id}
-              creator={creator}
-              price={price}
-              photos={photos}
-              city={city}
-              province={province}
-              country={country}
-              category={category}
-              type={type}
-              booking={booking}
-            />
-          )
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {propertyList.map(
+            ({
+              _id,
+              creator,
+              photos,
+              city,
+              province,
+              country,
+              category,
+              price,
+              type,
+              booking = false,
+            }) => (
+              <ListingCard
+                key={_id}
+                listingId={_id}
+                creator={creator}
+                price={price}
+                photos={photos}
+                city={city}
+                province={province}
+                country={country}
+                category={category}
+                type={type}
+                booking={booking}
+              />
+            )
+          )}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

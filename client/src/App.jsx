@@ -12,6 +12,9 @@ import { Toaster } from "react-hot-toast";
 import WishList from "./pages/WishList";
 import PropertyList from "./pages/PropertyList";
 import ReservationList from "./pages/ReservationList";
+import CategoryPage from "./pages/CategoryPage";
+import SearchPage from "./pages/SearchPage";
+import Footer from "./components/Footer";
 
 const App = () => {
   useEffect(() => {
@@ -35,6 +38,11 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/create-listing" element={<CreateListing />} />
         <Route path="/get-listing/:listingId" element={<ListingDetails />} />
+        <Route path="/get-listing/search/:search" element={<SearchPage />} />
+        <Route
+          path="/get-listing/category/:category"
+          element={<CategoryPage />}
+        />
         <Route path="/:userId/trips" element={<TripList />} />
         <Route path="/:userId/wishList" element={<WishList />} />
         <Route path="/:userId/propertyList" element={<PropertyList />} />

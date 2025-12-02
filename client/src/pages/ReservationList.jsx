@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import { setReservationList } from "../redux/slices/state";
 import ListingCard from "../components/ListingCard";
+import Footer from "../components/Footer";
 
 const ReservationList = () => {
   const [loading, setLoading] = useState(true);
@@ -47,48 +48,52 @@ const ReservationList = () => {
   return loading ? (
     <Loader />
   ) : (
-    <div className="px-4 sm:px-8 md:px-16 lg:px-20 mt-30">
-      <h1 className="my-6 text-xl font-semibold">Your Reservation List</h1>
+    <>
+      {" "}
+      <div className="px-4 sm:px-8 md:px-16 lg:px-20 pt-32">
+        <h1 className="my-6 text-xl font-semibold">Your Reservation List</h1>
 
-      <div
-        className="
+        <div
+          className="
           grid 
           grid-cols-1
           sm:grid-cols-2
           lg:grid-cols-3
           gap-6
         "
-      >
-        {reservationList?.map(
-          ({
-            listingId,
-            startDate,
-            hostId,
-            totalPrice,
+        >
+          {reservationList?.map(
+            ({
+              listingId,
+              startDate,
+              hostId,
+              totalPrice,
 
-            endDate,
-            bookings = true,
-          }) => {
-            return (
-              <ListingCard
-                key={reservationList._id}
-                creator={hostId._id}
-                listingId={listingId._id}
-                startDate={startDate}
-                endDate={endDate}
-                totalPrice={totalPrice}
-                photos={listingId.photos}
-                city={listingId.city}
-                province={listingId.province}
-                country={listingId.country}
-                category={listingId.category}
-                booking={bookings}
-              />
-            );
-          }
-        )}
+              endDate,
+              bookings = true,
+            }) => {
+              return (
+                <ListingCard
+                  key={reservationList._id}
+                  creator={hostId._id}
+                  listingId={listingId._id}
+                  startDate={startDate}
+                  endDate={endDate}
+                  totalPrice={totalPrice}
+                  photos={listingId.photos}
+                  city={listingId.city}
+                  province={listingId.province}
+                  country={listingId.country}
+                  category={listingId.category}
+                  booking={bookings}
+                />
+              );
+            }
+          )}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

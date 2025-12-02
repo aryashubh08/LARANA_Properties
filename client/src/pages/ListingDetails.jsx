@@ -7,6 +7,7 @@ import { BsCurrencyRupee } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import toast from "react-hot-toast"; // ⬅ ADD THIS
+import Footer from "../components/Footer";
 
 const ListingDetails = () => {
   const navigate = useNavigate();
@@ -216,6 +217,7 @@ const ListingDetails = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };

@@ -141,7 +141,7 @@ const ListingCard = ({
       {/* Wishlist button */}
       <button onClick={toggleWishList} className="absolute top-3 right-3 z-50">
         <FaHeart
-          className={`${isLiked ? "text-red-500" : "text-gray-500"} text-2xl`}
+          className={`${isLiked ? "text-red-500" : "text-gray-100"} text-2xl`}
         />
       </button>
     </div>
