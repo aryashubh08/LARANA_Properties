@@ -20,7 +20,7 @@ const TripList = () => {
   const getTripList = async () => {
     try {
       const response = await fetch(
-        `https://larana-properties-server.vercel.app/${userId}/trips`,
+        `https://larana-properties-server.vercel.app/api/v1/user/${userId}/trips`,
         {
           method: "GET",
           headers: {

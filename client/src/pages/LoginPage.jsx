@@ -23,7 +23,7 @@ const RegisterPage = () => {
 
     try {
       const response = await fetch(
-        "https://larana-properties-server.vercel.app/login",
+        "https://larana-properties-server.vercel.app/api/v1/user/login",
         {
           method: "POST",
           body: JSON.stringify(formData),

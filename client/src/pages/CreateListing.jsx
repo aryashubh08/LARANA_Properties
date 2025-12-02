@@ -115,7 +115,7 @@ const CreateListing = () => {
       const loadingToast = toast.loading("Publishing your listing...");
 
       const response = await fetch(
-        "http://localhost:4400/api/v1/creator/create-listing",
+        "https://larana-properties-server.vercel.app/api/v1/creator/create-listing",
         {
           method: "POST",
           body: listingForm,

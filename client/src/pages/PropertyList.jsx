@@ -15,7 +15,7 @@ const PropertyList = () => {
   const getPropertyList = async () => {
     try {
       const response = await fetch(
-        `https://larana-properties-server.vercel.app/${user._id}/propertyList`,
+        `https://larana-properties-server.vercel.app/api/v1/user/${user._id}/propertyList`,
         { method: "GET" }
       );
 

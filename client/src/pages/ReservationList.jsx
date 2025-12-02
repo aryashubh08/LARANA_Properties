@@ -20,7 +20,7 @@ const ReservationList = () => {
   const getReservationList = async () => {
     try {
       const response = await fetch(
-        `https://larana-properties-server.vercel.app/${userId}/reservationList`,
+        `https://larana-properties-server.vercel.app/api/v1/user/${userId}/reservationList`,
         {
           method: "GET",
           headers: {
