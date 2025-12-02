@@ -18,8 +18,6 @@ app.use(
   cors({
     origin: "https://larana-properties.vercel.app",
     credentials: true,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
