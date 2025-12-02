@@ -16,7 +16,7 @@ db.connect();
 // Allow your frontend origin and PATCH method
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://larana-properties.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
