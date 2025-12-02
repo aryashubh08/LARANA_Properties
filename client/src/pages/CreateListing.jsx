@@ -153,15 +153,15 @@ export default function CreateListing() {
   return (
     <div
       className="min-h-screen"
-      style={{ background: "linear-gradient(180deg,#FFF7ED 0%, #FFFDF8 100%)" }}
+      // style={{ background: "linear-gradient(180deg,#FFF7ED 0%, #FFFDF8 100%)" }}
     >
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-6 lg:px-8 pt-28 pb-20">
+      <main className="max-w-7xl mx-auto px-2 lg:px-8 pt-28 pb-20">
         <div className="bg-white border border-amber-100 rounded-3xl shadow-2xl overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             {/* LEFT - Form */}
-            <section className="w-full lg:w-2/3 p-10">
+            <section className="w-full lg:w-2/3 p-4">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h1 className="text-3xl font-semibold tracking-tight text-gray-800">
