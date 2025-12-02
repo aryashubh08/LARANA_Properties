@@ -44,7 +44,7 @@ const Listings = () => {
   return (
     <>
       {/* category buttons */}
-      <div className="p-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 px-2 sm:px-10 md:px-30">
+      <div className="p-20 grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 px-2 sm:px-10 md:px-30">
         {categories?.map((cate, index) => {
           const isSelected = selectedCategory === cate.label;
 
@@ -56,7 +56,7 @@ const Listings = () => {
               key={index}
               className={`
                 relative overflow-hidden rounded-md group
-                h-[200px] w-full cursor-pointer bg-cover bg-center
+                h-[150px] w-full cursor-pointer bg-cover bg-center
                 transition-all duration-300
                 ${
                   isSelected
