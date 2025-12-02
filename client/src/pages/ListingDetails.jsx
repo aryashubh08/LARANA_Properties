@@ -5,31 +5,31 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { BsCurrencyRupee } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import Navbar from "../components/Navbar";
-import toast from "react-hot-toast"; // ⬅ ADD THIS
+import toast from "react-hot-toast";
 import Footer from "../components/Footer";
 
 const ListingDetails = () => {
   const navigate = useNavigate();
   const customerId = useSelector((state) => state?.user?._id);
-  const [selectedRange, setSelectedRange] = useState({ from: null, to: null });
+  const { listingId } = useParams();
 
   const [loading, setLoading] = useState(true);
-  const { listingId } = useParams();
   const [listing, setListing] = useState(null);
+  const [selectedRange, setSelectedRange] = useState({
+    from: null,
+    to: null,
+  });
 
   const getListingDetails = async () => {
     try {
-      const response = await fetch(
-        `https://larana-properties-server.vercel.app/api/v1/creator/get-listing/${listingId}`,
-        { method: "GET" }
+      const res = await fetch(
+        `https://larana-properties-server.vercel.app/api/v1/creator/get-listing/${listingId}`
       );
-      const data = await response.json();
+      const data = await res.json();
       setListing(data.listing);
       setLoading(false);
     } catch (error) {
-      console.log("Fetch listing details failed", error.message);
-      toast.error("Failed to load listing");
+      toast.error("Failed to fetch listing");
     }
   };
 
@@ -43,184 +43,188 @@ const ListingDetails = () => {
 
   const dayCount =
     selectedRange.from && selectedRange.to
-      ? Math.round(
-          (selectedRange.to - selectedRange.from) / (1000 * 60 * 60 * 24)
-        ) + 1
+      ? Math.round((selectedRange.to - selectedRange.from) / 86400000) + 1
       : 0;
 
-  // submit bookings
   const handleSubmit = async () => {
     if (!selectedRange.from || !selectedRange.to) {
-      toast.error("Please select start and end dates");
+      toast.error("Please choose your stay duration!");
       return;
     }
 
-    try {
-      const bookingForm = {
-        customerId,
-        listingId,
-        hostId: listing.creator._id,
-        startDate: selectedRange.from.toDateString(),
-        endDate: selectedRange.to.toDateString(),
-        totalPrice: listing.price * dayCount,
-      };
+    const bookingForm = {
+      customerId,
+      listingId,
+      hostId: listing.creator._id,
+      startDate: selectedRange.from.toDateString(),
+      endDate: selectedRange.to.toDateString(),
+      totalPrice: listing.price * dayCount,
+    };
 
-      const loadingToast = toast.loading("Processing your booking...");
+    const toastId = toast.loading("Booking your stay...");
 
-      const response = await fetch(
-        "https://larana-properties-server.vercel.app/api/v1/bookings/create-booking",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(bookingForm),
-        }
-      );
-
-      toast.dismiss(loadingToast);
-
-      if (response.ok) {
-        toast.success("Booking confirmed!");
-        navigate(`/${customerId}/trips`);
-      } else {
-        toast.error("Booking failed. Please try again.");
+    const response = await fetch(
+      "https://larana-properties-server.vercel.app/api/v1/bookings/create-booking",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingForm),
       }
-    } catch (error) {
-      console.log("Submit booking failed", error.message);
-      toast.error("Something went wrong!");
+    );
+
+    toast.dismiss(toastId);
+
+    if (response.ok) {
+      toast.success("Booking confirmed!");
+      navigate(`/${customerId}/trips`);
+    } else {
+      toast.error("Booking failed. Try again.");
     }
   };
 
   return (
     <>
-      <div className="my-30 md:px-20 px-10">
-        {!listing ? (
-          <p>Loading...</p>
+      <div className="max-w-6xl mx-auto px-6 md:px-12 pt-20">
+        {loading || !listing ? (
+          <p className="text-gray-600 text-center mt-20">Loading...</p>
         ) : (
-          <div>
-            <h1 className="text-3xl font-semibold">{listing.title}</h1>
+          <div className="space-y-10">
+            {/* TITLE */}
+            <div>
+              <h1 className="text-4xl font-bold">{listing.title}</h1>
+              <p className="text-gray-600 mt-1 text-lg">
+                {listing.type} • {listing.city}, {listing.province},{" "}
+                {listing.country}
+              </p>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+            {/* PHOTOS GRID */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 rounded-xl overflow-hidden">
               {listing.photos.map((photo, index) => (
                 <img
                   key={index}
                   src={photo}
-                  alt={`Photo ${index}`}
-                  className="w-full h-60 object-cover rounded-lg"
+                  alt="Listing"
+                  className="w-full h-64 object-cover rounded-xl shadow-md"
                 />
               ))}
             </div>
 
-            <h2 className="text-gray-600 font-semibold py-2">
-              {listing.type} in {listing.city}, {listing.province},{" "}
-              {listing.country}
-            </h2>
-            <p className="text-gray-600 pb-4">
-              {listing.guestCount} guests - {listing.bedroomCount} bedroom(s) -{" "}
-              {listing.bedCount} bed(s) - {listing.bathroomCount} bathroom(s)
-            </p>
-            <hr className="text-gray-400" />
-
-            <div className="profile flex items-center gap-2 my-4">
+            {/* HOST INFO */}
+            <div className="flex items-center gap-4 bg-white p-5 rounded-xl shadow border">
               <img
-                src={listing?.creator?.profileImagePath}
-                className="h-10 w-10 rounded-full object-cover"
-                alt=""
+                src={listing.creator.profileImagePath}
+                className="h-14 w-14 rounded-full object-cover"
               />
-              <h3 className="text-gray-600 font-semibold">
-                Hosted by {listing.creator.firstName} {listing.creator.lastName}
-              </h3>
+              <div>
+                <h3 className="text-lg font-semibold">
+                  Hosted by {listing.creator.firstName}{" "}
+                  {listing.creator.lastName}
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  {listing.guestCount} guests • {listing.bedroomCount} bedrooms
+                  • {listing.bedCount} beds • {listing.bathroomCount} bathrooms
+                </p>
+              </div>
             </div>
-            <hr className="text-gray-400" />
 
-            <h3 className="text-gray-600 font-semibold py-2 text-lg">
-              Description
-            </h3>
-            <p className="text-gray-600 pb-4">{listing.description}</p>
-            <hr className="text-gray-400" />
+            {/* DESCRIPTION */}
+            <div className="bg-white p-6 rounded-xl shadow border space-y-4">
+              <h2 className="text-2xl font-semibold">About this place</h2>
+              <p className="text-gray-700 leading-relaxed">
+                {listing.description}
+              </p>
 
-            <h3 className="py-2 text-gray-600 font-semibold text-lg">
-              {listing.highlight}
-            </h3>
-            <p className="text-gray-600 pb-2 font-normal">
-              {listing.highlightDescription}
-            </p>
-            <hr className="text-gray-400" />
+              <h3 className="text-xl font-semibold pt-4">
+                {listing.highlight}
+              </h3>
+              <p className="text-gray-600">{listing.highlightDescription}</p>
+            </div>
 
-            <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
-              {/* LEFT SECTION */}
-              <div className="lg:col-span-2 h-fit">
-                <h2 className="text-2xl font-semibold">
-                  What this place offers?
-                </h2>
-                <div className="grid grid-cols-2 gap-4 mt-4 ">
-                  {listing.amenities.map((amenity, index) => {
-                    const facility = facilities.find(
-                      (facility) =>
-                        facility.name.toLowerCase() === amenity.toLowerCase()
-                    );
+            {/* AMENITIES */}
+            <div className="bg-white p-6 rounded-xl shadow border">
+              <h2 className="text-2xl font-semibold mb-5">
+                What this place offers
+              </h2>
 
-                    return (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="text-4xl">{facility?.icon}</div>
-                        <p className="text-lg text-gray-600">{amenity}</p>
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {listing.amenities.map((am, i) => {
+                  const facility = facilities.find(
+                    (f) => f.name.toLowerCase() === am.toLowerCase()
+                  );
+
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg shadow-sm"
+                    >
+                      <span className="text-3xl">{facility?.icon}</span>
+                      <span className="text-gray-700">{am}</span>
+                    </div>
+                  );
+                })}
               </div>
+            </div>
 
-              {/* RIGHT SECTION - Booking Calendar */}
-              <div className="w-full p-5 rounded-xl sticky top-10 border">
-                <h2 className="text-xl font-semibold mb-3">
-                  How long do you want to stay?
-                </h2>
+            {/* BOOKING SECTION */}
 
-                <DayPicker
-                  mode="range"
-                  selected={selectedRange}
-                  onSelect={handleSelect}
-                  footer={
-                    selectedRange.from &&
-                    selectedRange.to &&
-                    `Selected ${dayCount} night(s)`
-                  }
-                />
-              </div>
+            <div className="bg-white p-6 rounded-xl shadow border">
+              <h2 className="text-2xl font-semibold mb-6">
+                Choose your stay duration
+              </h2>
 
-              {dayCount > 0 && (
-                <div className="">
-                  <h2 className="text-xl font-semibold">
-                    {listing.price} x {dayCount} night
-                    {dayCount > 1 ? "s" : ""}
-                  </h2>
-                  <h2 className="flex text-lg text-gray-700 font-semibold items-center">
-                    Total price: <BsCurrencyRupee />
-                    {listing.price * dayCount}
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Start Date:{" "}
-                    {selectedRange.from
-                      ? selectedRange.from.toDateString()
-                      : "-"}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    End Date:{" "}
-                    {selectedRange.to ? selectedRange.to.toDateString() : "-"}
-                  </p>
-                  <button
-                    onClick={handleSubmit}
-                    className="mt-10 bg-red-500 text-white py-3 px-10 rounded-lg hover:bg-red-600 transition cursor-pointer"
-                  >
-                    BOOKING
-                  </button>
+              {/* Flex: Column on mobile, Row on laptop */}
+              <div className="flex flex-col lg:flex-row gap-10">
+                {/* LEFT: Calendar */}
+                <div className="w-full lg:w-1/2  rounded-xl p-2 overflow-x-auto max-w-full">
+                  <div className="min-w-[320px] items-center origin-top-left scale-90 md:scale-95">
+                    <DayPicker
+                      mode="range"
+                      selected={selectedRange}
+                      onSelect={handleSelect}
+                    />
+                  </div>
                 </div>
-              )}
+
+                {/* RIGHT: Booking Summary */}
+                {dayCount > 0 && (
+                  <div className="w-full lg:w-1/2 space-y-3">
+                    <h3 className="text-xl font-semibold">
+                      <span className="flex items-center gap-2">
+                        <BsCurrencyRupee />
+                        {listing.price} × {dayCount} night
+                        {dayCount > 1 ? "s" : ""}
+                      </span>
+                    </h3>
+
+                    <p className="text-gray-700 font-medium">
+                      Total: ₹{listing.price * dayCount}
+                    </p>
+
+                    <p className="text-sm text-gray-600">
+                      From: {selectedRange.from.toDateString()}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      To: {selectedRange.to.toDateString()}
+                    </p>
+
+                    <button
+                      onClick={handleSubmit}
+                      className="mt-5 w-full text-white py-3 rounded-xl text-lg font-semibold shadow-lg transition duration-300"
+                      style={{
+                        background: "linear-gradient(90deg,#B8860B,#D4AF37)",
+                      }}
+                    >
+                      BOOK NOW
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
       </div>
+
       <Footer />
     </>
   );
