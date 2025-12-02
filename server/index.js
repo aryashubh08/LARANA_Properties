@@ -27,6 +27,9 @@ app.use(express.json());
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/creator", listingRoutes);
 app.use("/api/v1/bookings", bookingRoutes);
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
