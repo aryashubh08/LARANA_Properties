@@ -21,7 +21,7 @@ const ListingDetails = () => {
   const getListingDetails = async () => {
     try {
       const response = await fetch(
-        `https://larana-properties.vercel.app/api/v1/creator/get-listing/${listingId}`,
+        `https://larana-properties-server.vercel.app/api/v1/creator/get-listing/${listingId}`,
         { method: "GET" }
       );
       const data = await response.json();
