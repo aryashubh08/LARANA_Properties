@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { categories, facilities, types } from "../data";
 import { FiPlusCircle, FiMinusCircle } from "react-icons/fi";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IoMdPhotos } from "react-icons/io";
 import { BsCurrencyRupee } from "react-icons/bs";
 import TextInput from "../components/TextInput";
