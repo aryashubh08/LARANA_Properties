@@ -16,7 +16,7 @@ const SearchPage = () => {
   const getSearchListing = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4400/api/v1/creator/get-listing/search/${search}`
+        `https://larana-properties-server.vercel.app/get-listing/search/${search}`
       );
 
       const data = await response.json();

@@ -20,7 +20,7 @@ const CategoryPage = () => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:4400/api/v1/creator/get-listing?category=${category}`,
+        `https://larana-properties-server.vercel.app/get-listing?category=${category}`,
         {
           method: "GET",
         }

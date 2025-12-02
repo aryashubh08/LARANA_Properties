@@ -18,8 +18,8 @@ const Listings = () => {
 
       const response = await fetch(
         selectedCategory !== "All"
-          ? `http://localhost:4400/api/v1/creator/get-listing?category=${selectedCategory}`
-          : "http://localhost:4400/api/v1/creator/get-listing"
+          ? `https://larana-properties-server.vercel.app/get-listing?category=${selectedCategory}`
+          : "https://larana-properties-server.vercel.app/get-listing"
       );
 
       const data = await response.json();

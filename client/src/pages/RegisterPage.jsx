@@ -53,7 +53,7 @@ const RegisterPage = () => {
       register_form.append("password", formData.password);
 
       const response = await fetch(
-        "http://localhost:4400/api/v1/user/register",
+        "https://larana-properties-server.vercel.app/register",
         {
           method: "POST",
           body: register_form,

@@ -22,11 +22,14 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4400/api/v1/user/login", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-type": "application/json" },
-      });
+      const response = await fetch(
+        "https://larana-properties-server.vercel.app/login",
+        {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: { "Content-type": "application/json" },
+        }
+      );
 
       const loggedIn = await response.json();
 

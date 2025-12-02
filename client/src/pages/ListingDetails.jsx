@@ -68,7 +68,7 @@ const ListingDetails = () => {
       const loadingToast = toast.loading("Processing your booking...");
 
       const response = await fetch(
-        "http://localhost:4400/api/v1/bookings/create-booking",
+        "https://larana-properties-server.vercel.app/create-booking",
         {
           method: "POST",
           headers: {

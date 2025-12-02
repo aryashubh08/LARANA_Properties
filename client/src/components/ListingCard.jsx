@@ -51,7 +51,7 @@ const ListingCard = ({
     try {
       if (user?._id !== creator._id) {
         const response = await fetch(
-          `http://localhost:4400/api/v1/user/${user._id}/${listingId}`,
+          `https://larana-properties-server.vercel.app/${user._id}/${listingId}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
