@@ -76,9 +76,9 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center">
+    <div className="w-full pt-15 flex items-center justify-center">
       <img
-        src="assets/login.jpg"
+        src="assets/register.jpg"
         alt=""
         className="w-full h-screen relative object-cover"
       />
@@ -178,8 +178,11 @@ const RegisterPage = () => {
               !passwordMatch
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
-            } bg-red-600 my-5 rounded px-4 py-2 text-white`}
+            }  my-5 rounded px-4 py-2 text-white`}
             type="submit"
+            style={{
+              background: "linear-gradient(90deg,#B8860B,#D4AF37)",
+            }}
           >
             Register
           </button>

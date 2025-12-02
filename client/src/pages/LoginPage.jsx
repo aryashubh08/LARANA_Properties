@@ -66,7 +66,7 @@ const RegisterPage = () => {
   return (
     <div className="w-full flex items-center justify-center">
       <img
-        src="assets/login.jpg"
+        src="assets/register.jpg"
         alt=""
         className="w-full h-screen relative object-cover"
       />
@@ -97,7 +97,10 @@ const RegisterPage = () => {
           />
 
           <button
-            className="bg-red-600 cursor-pointer mt-5 rounded px-4 py-2 text-white"
+            style={{
+              background: "linear-gradient(90deg,#B8860B,#D4AF37)",
+            }}
+            className=" cursor-pointer mt-5 rounded px-4 py-2 text-white"
             type="submit"
           >
             LogIn
