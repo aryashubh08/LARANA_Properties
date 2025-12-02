@@ -93,132 +93,136 @@ const ListingDetails = () => {
   };
 
   return (
-    <div className="my-30 md:px-20 px-10">
-      {!listing ? (
-        <p>Loading...</p>
-      ) : (
-        <div>
-          <h1 className="text-3xl font-semibold">{listing.title}</h1>
+    <>
+      <div className="my-30 md:px-20 px-10">
+        {!listing ? (
+          <p>Loading...</p>
+        ) : (
+          <div>
+            <h1 className="text-3xl font-semibold">{listing.title}</h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
-            {listing.photos.map((photo, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+              {listing.photos.map((photo, index) => (
+                <img
+                  key={index}
+                  src={photo}
+                  alt={`Photo ${index}`}
+                  className="w-full h-60 object-cover rounded-lg"
+                />
+              ))}
+            </div>
+
+            <h2 className="text-gray-600 font-semibold py-2">
+              {listing.type} in {listing.city}, {listing.province},{" "}
+              {listing.country}
+            </h2>
+            <p className="text-gray-600 pb-4">
+              {listing.guestCount} guests - {listing.bedroomCount} bedroom(s) -{" "}
+              {listing.bedCount} bed(s) - {listing.bathroomCount} bathroom(s)
+            </p>
+            <hr className="text-gray-400" />
+
+            <div className="profile flex items-center gap-2 my-4">
               <img
-                key={index}
-                src={photo}
-                alt={`Photo ${index}`}
-                className="w-full h-60 object-cover rounded-lg"
+                src={listing?.creator?.profileImagePath}
+                className="h-10 w-10 rounded-full object-cover"
+                alt=""
               />
-            ))}
-          </div>
+              <h3 className="text-gray-600 font-semibold">
+                Hosted by {listing.creator.firstName} {listing.creator.lastName}
+              </h3>
+            </div>
+            <hr className="text-gray-400" />
 
-          <h2 className="text-gray-600 font-semibold py-2">
-            {listing.type} in {listing.city}, {listing.province},{" "}
-            {listing.country}
-          </h2>
-          <p className="text-gray-600 pb-4">
-            {listing.guestCount} guests - {listing.bedroomCount} bedroom(s) -{" "}
-            {listing.bedCount} bed(s) - {listing.bathroomCount} bathroom(s)
-          </p>
-          <hr className="text-gray-400" />
-
-          <div className="profile flex items-center gap-2 my-4">
-            <img
-              src={listing?.creator?.profileImagePath}
-              className="h-10 w-10 rounded-full object-cover"
-              alt=""
-            />
-            <h3 className="text-gray-600 font-semibold">
-              Hosted by {listing.creator.firstName} {listing.creator.lastName}
+            <h3 className="text-gray-600 font-semibold py-2 text-lg">
+              Description
             </h3>
-          </div>
-          <hr className="text-gray-400" />
+            <p className="text-gray-600 pb-4">{listing.description}</p>
+            <hr className="text-gray-400" />
 
-          <h3 className="text-gray-600 font-semibold py-2 text-lg">
-            Description
-          </h3>
-          <p className="text-gray-600 pb-4">{listing.description}</p>
-          <hr className="text-gray-400" />
+            <h3 className="py-2 text-gray-600 font-semibold text-lg">
+              {listing.highlight}
+            </h3>
+            <p className="text-gray-600 pb-2 font-normal">
+              {listing.highlightDescription}
+            </p>
+            <hr className="text-gray-400" />
 
-          <h3 className="py-2 text-gray-600 font-semibold text-lg">
-            {listing.highlight}
-          </h3>
-          <p className="text-gray-600 pb-2 font-normal">
-            {listing.highlightDescription}
-          </p>
-          <hr className="text-gray-400" />
-
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* LEFT SECTION */}
-            <div className="lg:col-span-2 h-fit">
-              <h2 className="text-2xl font-semibold">
-                What this place offers?
-              </h2>
-              <div className="grid grid-cols-2 gap-4 mt-4 ">
-                {listing.amenities.map((amenity, index) => {
-                  const facility = facilities.find(
-                    (facility) =>
-                      facility.name.toLowerCase() === amenity.toLowerCase()
-                  );
-
-                  return (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className="text-4xl">{facility?.icon}</div>
-                      <p className="text-lg text-gray-600">{amenity}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* RIGHT SECTION - Booking Calendar */}
-            <div className="w-full p-5 rounded-xl sticky top-10 border">
-              <h2 className="text-xl font-semibold mb-3">
-                How long do you want to stay?
-              </h2>
-
-              <DayPicker
-                mode="range"
-                selected={selectedRange}
-                onSelect={handleSelect}
-                footer={
-                  selectedRange.from &&
-                  selectedRange.to &&
-                  `Selected ${dayCount} night(s)`
-                }
-              />
-            </div>
-
-            {dayCount > 0 && (
-              <div className="">
-                <h2 className="text-xl font-semibold">
-                  {listing.price} x {dayCount} night
-                  {dayCount > 1 ? "s" : ""}
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
+              {/* LEFT SECTION */}
+              <div className="lg:col-span-2 h-fit">
+                <h2 className="text-2xl font-semibold">
+                  What this place offers?
                 </h2>
-                <h2 className="flex text-lg text-gray-700 font-semibold items-center">
-                  Total price: <BsCurrencyRupee />
-                  {listing.price * dayCount}
-                </h2>
-                <p className="text-sm text-gray-600">
-                  Start Date:{" "}
-                  {selectedRange.from ? selectedRange.from.toDateString() : "-"}
-                </p>
-                <p className="text-sm text-gray-600">
-                  End Date:{" "}
-                  {selectedRange.to ? selectedRange.to.toDateString() : "-"}
-                </p>
-                <button
-                  onClick={handleSubmit}
-                  className="mt-10 bg-red-500 text-white py-3 px-10 rounded-lg hover:bg-red-600 transition cursor-pointer"
-                >
-                  BOOKING
-                </button>
+                <div className="grid grid-cols-2 gap-4 mt-4 ">
+                  {listing.amenities.map((amenity, index) => {
+                    const facility = facilities.find(
+                      (facility) =>
+                        facility.name.toLowerCase() === amenity.toLowerCase()
+                    );
+
+                    return (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="text-4xl">{facility?.icon}</div>
+                        <p className="text-lg text-gray-600">{amenity}</p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            )}
+
+              {/* RIGHT SECTION - Booking Calendar */}
+              <div className="w-full p-5 rounded-xl sticky top-10 border">
+                <h2 className="text-xl font-semibold mb-3">
+                  How long do you want to stay?
+                </h2>
+
+                <DayPicker
+                  mode="range"
+                  selected={selectedRange}
+                  onSelect={handleSelect}
+                  footer={
+                    selectedRange.from &&
+                    selectedRange.to &&
+                    `Selected ${dayCount} night(s)`
+                  }
+                />
+              </div>
+
+              {dayCount > 0 && (
+                <div className="">
+                  <h2 className="text-xl font-semibold">
+                    {listing.price} x {dayCount} night
+                    {dayCount > 1 ? "s" : ""}
+                  </h2>
+                  <h2 className="flex text-lg text-gray-700 font-semibold items-center">
+                    Total price: <BsCurrencyRupee />
+                    {listing.price * dayCount}
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    Start Date:{" "}
+                    {selectedRange.from
+                      ? selectedRange.from.toDateString()
+                      : "-"}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    End Date:{" "}
+                    {selectedRange.to ? selectedRange.to.toDateString() : "-"}
+                  </p>
+                  <button
+                    onClick={handleSubmit}
+                    className="mt-10 bg-red-500 text-white py-3 px-10 rounded-lg hover:bg-red-600 transition cursor-pointer"
+                  >
+                    BOOKING
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
