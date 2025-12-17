@@ -12,6 +12,7 @@ const ListingCard = ({
   listingId,
   creator,
   photos = [],
+  title,
   city,
   province,
   country,
@@ -62,13 +63,14 @@ const ListingCard = ({
 
         if (!data.success) {
           toast.error(data.message || "Something went wrong");
+
           return;
         }
 
         toast.success(
           data.isLiked ? "Added to wishlist" : "Removed from wishlist"
         );
-
+        console.log(data);
         // Update Redux
         dispatch(setWishList(data.wishList));
       } else {
@@ -113,9 +115,11 @@ const ListingCard = ({
 
       {/* Card Info */}
       <div className="mt-2 px-2">
-        <h2 className="text-lg font-bold text-gray-800">
+        {/* Hotel Title */}
+        <h2 className="text-lg font-bold text-gray-900 truncate">{title}</h2>
+        {/* <h2 className="text-lg font-bold text-gray-800">
           {city}, {province}, {country}
-        </h2>
+        </h2> */}
         <p className="text-sm text-gray-500 capitalize">{category}</p>
         {!booking ? (
           <>

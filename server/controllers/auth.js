@@ -46,7 +46,7 @@ exports.register = async (req, res) => {
       src: response.url,
       transformation: [
         {
-          width: "1280",
+          width: "480",
           quality: "auto",
           format: "webp",
         },

@@ -98,6 +98,7 @@ const Listings = () => {
             ({
               _id,
               creator,
+              title,
               photos,
               city,
               province,
@@ -114,6 +115,7 @@ const Listings = () => {
                   creator={creator}
                   photos={photos}
                   city={city}
+                  title={title}
                   province={province}
                   country={country}
                   category={category}
