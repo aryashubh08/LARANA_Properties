@@ -111,7 +111,7 @@ const ListingDetails = () => {
             </div>
 
             {/* HOST INFO */}
-            <div className="flex items-center gap-4 bg-white p-5 rounded-xl shadow border">
+            <div className="flex items-center gap-4 bg-white p-5 rounded-xl shadow ">
               <img
                 src={listing.creator.profileImagePath}
                 className="h-14 w-14 rounded-full object-cover"
@@ -129,7 +129,7 @@ const ListingDetails = () => {
             </div>
 
             {/* DESCRIPTION */}
-            <div className="bg-white p-6 rounded-xl shadow border space-y-4">
+            <div className="bg-white p-6 rounded-xl shadow  space-y-4">
               <h2 className="text-2xl font-semibold">About this place</h2>
               <p className="text-gray-700 leading-relaxed">
                 {listing.description}
@@ -142,7 +142,7 @@ const ListingDetails = () => {
             </div>
 
             {/* AMENITIES */}
-            <div className="bg-white p-6 rounded-xl shadow border">
+            <div className="bg-white p-6 rounded-xl shadow ">
               <h2 className="text-2xl font-semibold mb-5">
                 What this place offers
               </h2>
@@ -168,57 +168,59 @@ const ListingDetails = () => {
 
             {/* BOOKING SECTION */}
 
-            <div className="bg-white p-6 rounded-xl shadow border">
-              <h2 className="text-2xl font-semibold mb-6">
-                Choose your stay duration
-              </h2>
+            <div className="w-full flex justify-center">
+              <div className="bg-white p-6 rounded-xl shadow  w-full max-w-6xl">
+                <h2 className="text-2xl font-semibold mb-6">
+                  Choose your stay duration
+                </h2>
 
-              {/* Flex: Column on mobile, Row on laptop */}
-              <div className="flex flex-col lg:flex-row gap-10">
-                {/* LEFT: Calendar */}
-                <div className="w-full lg:w-1/2  rounded-xl p-2 overflow-x-auto max-w-full">
-                  <div className="min-w-[320px] items-center origin-top-left scale-90 md:scale-95">
-                    <DayPicker
-                      mode="range"
-                      selected={selectedRange}
-                      onSelect={handleSelect}
-                    />
+                {/* Flex: Column on mobile, Row on laptop */}
+                <div className="flex flex-col lg:flex-row gap-10">
+                  {/* LEFT: Calendar */}
+                  <div className="w-full lg:w-1/2 rounded-xl p-2 overflow-x-auto">
+                    <div className="min-w-[320px] origin-top-left scale-90 md:scale-95">
+                      <DayPicker
+                        mode="range"
+                        selected={selectedRange}
+                        onSelect={handleSelect}
+                      />
+                    </div>
                   </div>
+
+                  {/* RIGHT: Booking Summary */}
+                  {dayCount > 0 && (
+                    <div className="w-full lg:w-1/2 space-y-3">
+                      <h3 className="text-xl font-semibold">
+                        <span className="flex items-center gap-2">
+                          <BsCurrencyRupee />
+                          {listing.price} × {dayCount} night
+                          {dayCount > 1 ? "s" : ""}
+                        </span>
+                      </h3>
+
+                      <p className="text-gray-700 font-medium">
+                        Total: ₹{listing.price * dayCount}
+                      </p>
+
+                      <p className="text-sm text-gray-600">
+                        From: {selectedRange.from.toDateString()}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        To: {selectedRange.to.toDateString()}
+                      </p>
+
+                      <button
+                        onClick={handleSubmit}
+                        className="mt-5 w-full text-white py-3 rounded-xl text-lg font-semibold shadow-lg transition duration-300"
+                        style={{
+                          background: "linear-gradient(90deg,#B8860B,#D4AF37)",
+                        }}
+                      >
+                        BOOK NOW
+                      </button>
+                    </div>
+                  )}
                 </div>
-
-                {/* RIGHT: Booking Summary */}
-                {dayCount > 0 && (
-                  <div className="w-full lg:w-1/2 space-y-3">
-                    <h3 className="text-xl font-semibold">
-                      <span className="flex items-center gap-2">
-                        <BsCurrencyRupee />
-                        {listing.price} × {dayCount} night
-                        {dayCount > 1 ? "s" : ""}
-                      </span>
-                    </h3>
-
-                    <p className="text-gray-700 font-medium">
-                      Total: ₹{listing.price * dayCount}
-                    </p>
-
-                    <p className="text-sm text-gray-600">
-                      From: {selectedRange.from.toDateString()}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      To: {selectedRange.to.toDateString()}
-                    </p>
-
-                    <button
-                      onClick={handleSubmit}
-                      className="mt-5 w-full text-white py-3 rounded-xl text-lg font-semibold shadow-lg transition duration-300"
-                      style={{
-                        background: "linear-gradient(90deg,#B8860B,#D4AF37)",
-                      }}
-                    >
-                      BOOK NOW
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           </div>

@@ -34,7 +34,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 z-100 bg-white shadow-md px-10 flex w-full items-center justify-between">
+    <div className="fixed top-0 z-49 bg-white shadow-md px-10 flex w-full items-center justify-between">
       <Link to="/" className="max-md:w-20">
         <img
           src="/assets/logo.png"

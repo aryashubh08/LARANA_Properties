@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -14,22 +14,28 @@ import PropertyList from "./pages/PropertyList";
 import ReservationList from "./pages/ReservationList";
 import CategoryPage from "./pages/CategoryPage";
 import SearchPage from "./pages/SearchPage";
-import Footer from "./components/Footer";
 
 const App = () => {
+  const location = useLocation();
+
+  // ✅ Lenis init
   useEffect(() => {
     const lenis = initLenis();
-
-    return () => {
-      lenis.destroy(); // fixed: Lenis → lenis
-    };
+    return () => lenis.destroy();
   }, []);
+
+  // 🔥 FIX: Always scroll to TOP on route change
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // IMPORTANT
+    });
+  }, [location.pathname]);
 
   return (
     <>
-      {/* 🔥 Toaster added here */}
       <Toaster position="top-center" reverseOrder={false} />
-
       <Navbar />
 
       <Routes>
